@@ -8,6 +8,7 @@ data class RequestError(
 )
 
 data class Room(
+        val id: Int,
         val number: Int,
         val floor: Int,
         val description: String,

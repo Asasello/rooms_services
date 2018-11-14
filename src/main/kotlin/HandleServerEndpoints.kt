@@ -19,7 +19,7 @@ import utills.ResponseErrorCode
 //DATABASE
 fun getAllRooms() = transaction {
     dao.Rooms.selectAll().map {
-        Room(it[Rooms.number], it[Rooms.floor], it[Rooms.description], it[Rooms.capacity])
+        Room(it[Rooms.id].value, it[Rooms.number], it[Rooms.floor], it[Rooms.description], it[Rooms.capacity])
     }
 }
 
