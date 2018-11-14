@@ -29,3 +29,10 @@ Kotlin, Ktor, Exposed, MySQL
 * W **Workbench** powinien, w zakładce *schemas* klikamy PPM na `room_services_db` i wybieramy *Refresh all*. Teraz po rozwinięciu zakładki `room_services_db` -> `Tables` należy sprawdzić czy zostałī utworzone tabele *Facilities*, *FacilitiesReservations*, *Rooms*
 
 *Przy ponownym uruchomieniu projektu radzę odkomentować `createDataSet()` bo za każdym razem będzie czyścić wszystkie tabelki i wstawiać defaultowe dane
+
+
+# Testy JMeter
+1. ściągamy https://jmeter.apache.org/download_jmeter.cgi
+2. do katalogu `lib` wrzucamy `mysql-connector-java-5.1.46.jar` (pozwala połączyć się z mySQL)
+3. w folderze `bin` włączamy `jmeter`
+4. importujemy projekt `Test Room Service.jmx`
