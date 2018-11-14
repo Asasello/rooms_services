@@ -12,6 +12,20 @@ Kotlin, Ktor, Exposed, MySQL
   port: 3306
   username: root
   password: Database223344
-* włączamy projekt w IntelliJ -> przechodzimy do pliku Runner.kt -> odkomentować `createDataSet()` -> run
-* jak się projekt odpali to w workbenchu w naszej stworzonej wcześniej instancji bazy danych powinien się pokazać nowy schemat bazy o nazwie `room_services_db` z wszystkimi tabelkami i danymi 
-* przy ponownym uruchomieniu projektu radzę odkomentować `createDataSet()` bo za każdym razem będzie czyścić wszystkie tabelki i wstawiać defaultowe dane
+# Tworzenie bazy w MySQL
+## Workbench
+1. włączamy workbencha
+2. z *MySQL Connections* wybieramy *Local Instance 3306*
+3. w *schemas* (pasek po lewej stronie) klikamy PPM i wybieramy *Create schema...*
+4. w *Schema Name* wpisujemy `room_services_db`
+5. klikamy *apply*
+6. w *schemas* powinien pokazać się element o nazwie `room_services_db`
+## IntelliJ
+1. włączamy projekt w IntelliJ
+2. przechodzimy do pliku Runner.kt
+3. odkomentować `createDataSet()`
+4. uruchamiamy projekt - run
+## Weryfikacja
+* W **Workbench** powinien, w zakładce *schemas* klikamy PPM na `room_services_db` i wybieramy *Refresh all*. Teraz po rozwinięciu zakładki `room_services_db` -> `Tables` należy sprawdzić czy zostałī utworzone tabele *Facilities*, *FacilitiesReservations*, *Rooms*
+
+*Przy ponownym uruchomieniu projektu radzę odkomentować `createDataSet()` bo za każdym razem będzie czyścić wszystkie tabelki i wstawiać defaultowe dane
