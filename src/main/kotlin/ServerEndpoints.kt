@@ -25,5 +25,8 @@ fun Application.roomServiceEndpoints() {
         post("/add-facility-reservation") {
             addFacilityReservationPost()
         }
+        post("/cancel-facility-reservation{id}"){
+            handleFacilityReservationCancel()
+        }
     }
 }

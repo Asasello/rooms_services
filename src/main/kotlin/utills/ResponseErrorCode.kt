@@ -14,6 +14,9 @@ sealed class ResponseErrorCode(private val request: String, private val message:
     class DeleteFacilityIsAlreadyDeleted(request: String) : ResponseErrorCode(request, DELETE_FACILITY_ALREADY_DELETED_MESSAGE, HttpStatusCode(DELETE_FACILITY_ALREADY_DELETED_INTERNAL_CODE, DELETE_FACILITY_ALREADY_DELETED__DESC))
     class FacilityReservationMissedBody(request: String) : ResponseErrorCode(request, FACILITY_RESERVATION_MISSED_BODY_VALUES_MESSAGE, HttpStatusCode(FACILITY_RESERVATION_MISSED_INTERNAL_CODE, FACILITY_RESERVATION_MISSED_DELETED__DESC))
     class FacilityReservationNoRoomBody(request: String) : ResponseErrorCode(request, FACILITY_RESERVATION_NO_ROOM_MESSAGE, HttpStatusCode(FACILITY_RESERVATION_NO_ROOM_INTERNAL_CODE, FACILITY_RESERVATION_NO_ROOM_DESC))
+    class CancelFacilityReservationIdNull(request: String) : ResponseErrorCode(request, CANCEL_FACILITY_RESERVATION_ID_NULL_MESSAGE, HttpStatusCode(CANCEL_FACILITY_RESERVATION_ID_NULL_INTERNAL_CODE, CANCEL_FACILITY_RESERVATION_ID_NULL_DESC))
+    class CancelFacilityNoExist(request: String) : ResponseErrorCode(request, CANCEL_FACILITY_RESERVATION_NO_EXIST_MESSAGE, HttpStatusCode(CANCEL_FACILITY_RESERVATION_NO_EXIST_INTERNAL_CODE, CANCEL_FACILITY_RESERVATION_NO_EXIST_DESC))
+    class CancelFacilityAlreadyCanceled(request: String) : ResponseErrorCode(request, CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_MESSAGE, HttpStatusCode(CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_INTERNAL_CODE, CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_DESC))
 
     companion object {
         const val EXTERNAL_ERROR_CODE = 418
@@ -58,6 +61,18 @@ sealed class ResponseErrorCode(private val request: String, private val message:
         private const val FACILITY_RESERVATION_NO_ROOM_MESSAGE = "No room with given id."
         private const val FACILITY_RESERVATION_NO_ROOM_INTERNAL_CODE = 409
         private const val FACILITY_RESERVATION_NO_ROOM_DESC = "Internal Server Error"
+
+        private const val CANCEL_FACILITY_RESERVATION_ID_NULL_MESSAGE = "Facility Reservation ID can not be null."
+        private const val CANCEL_FACILITY_RESERVATION_ID_NULL_INTERNAL_CODE = 405
+        private const val CANCEL_FACILITY_RESERVATION_ID_NULL_DESC = "Internal Server Error"
+
+        private const val CANCEL_FACILITY_RESERVATION_NO_EXIST_MESSAGE = "No facility reservation with given id."
+        private const val CANCEL_FACILITY_RESERVATION_NO_EXIST_INTERNAL_CODE = 406
+        private const val CANCEL_FACILITY_RESERVATION_NO_EXIST_DESC = "Internal Server Error"
+
+        private const val CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_MESSAGE = "This facility reservation is already canceled."
+        private const val CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_INTERNAL_CODE = 407
+        private const val CANCEL_FACILITY_RESERVATION_ALREADY_CANCELED_DESC = "Internal Server Error"
     }
 }
 

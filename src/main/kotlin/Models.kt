@@ -23,6 +23,11 @@ data class Facility(
 
 data class PostAddFacility(val facility_type: Int?)
 
-data class PostAddFacilityReservation(val start_date: Long?, val end_date: Long?, val room_id: Int?, val facility_type: Int?)
+data class PostAddFacilityReservation(
+        val start_date: Long?,
+        val end_date: Long?,
+        val room_id: Int?,
+        val facility_type: Int?
+)
 
 data class PostCancelReservation(val reservation_id: Int)

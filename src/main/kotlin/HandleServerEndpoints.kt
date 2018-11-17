@@ -62,6 +62,20 @@ fun deleteFacility(id: Int) = transaction {
     }
 }
 
+fun isFacilityReservationExist(id: Int) = transaction {
+    return@transaction FacilityReservationEntity.findById(id) != null
+}
+
+fun isFacilityReservationActive(id: Int) = transaction {
+    return@transaction FacilityReservationEntity.findById(id)?.isCanceled?.not() ?: false
+}
+
+fun deleteReservationFacility(id: Int) = transaction {
+    return@transaction FacilitiesReservations.update({ FacilitiesReservations.id.eq(id) }) {
+        it[is_canceled] = true
+    }
+}
+
 fun createReservation(_startDate: Long, _endDate: Long, _roomId: Int, _facilityType: FacilitiesTypes, _facilityId: Int) =
         FacilityReservationEntity.new {
             startDate = _startDate
@@ -144,6 +158,28 @@ suspend fun PipelineContext<Unit, ApplicationCall>.handleFacilityDelete() {
     call.respond(mapOf("status" to "success"))
 }
 
+suspend fun PipelineContext<Unit, ApplicationCall>.handleFacilityReservationCancel() {
+    val id = call.parameters["id"]
+
+    if (id.isNullOrEmpty()) {
+        error(ResponseErrorCode.CancelFacilityReservationIdNull(call.request.uri))
+        return
+    }
+
+    if (!isFacilityReservationExist(id.toInt())) {
+        error(ResponseErrorCode.CancelFacilityNoExist(call.request.uri))
+        return
+    }
+
+    if (!isFacilityReservationActive(id.toInt())) {
+        error(ResponseErrorCode.CancelFacilityAlreadyCanceled(call.request.uri))
+        return
+    }
+
+    deleteReservationFacility(id.toInt())
+    call.respond(mapOf("status" to "success"))
+}
+
 suspend fun PipelineContext<Unit, ApplicationCall>.addFacilityReservationPost() {
     val postBody = call.receive<PostAddFacilityReservation>()
     val startDate = postBody.start_date ?: run {
@@ -175,6 +211,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.addFacilityReservationPost() 
         val query = "SELECT id FROM Facilities facilities WHERE type = ${facilityType.ordinal} AND isActive = TRUE AND NOT EXISTS (" +
                 " SELECT reservation.facility_id FROM FacilitiesReservations reservation" +
                 " WHERE reservation.facility_id = facilities.id " +
+                " AND reservation.is_canceled = FALSE " +
                 " AND (" +
                 " (reservation.start_date >= $startDate AND reservation.end_date <= $endDate)" +
                 " OR" +
