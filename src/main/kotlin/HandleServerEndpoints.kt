@@ -62,10 +62,6 @@ fun deleteFacility(id: Int) = transaction {
     }
 }
 
-fun isFacilityReservationExist(id: Int) = transaction {
-    return@transaction FacilityReservationEntity.findById(id) != null
-}
-
 fun isFacilityReservationActive(id: Int) = transaction {
     return@transaction FacilityReservationEntity.findById(id)?.isCanceled?.not() ?: false
 }
@@ -74,6 +70,17 @@ fun deleteReservationFacility(id: Int) = transaction {
     return@transaction FacilitiesReservations.update({ FacilitiesReservations.id.eq(id) }) {
         it[is_canceled] = true
     }
+}
+
+fun findFacilityReservation(startDate: Long, endDate: Long, facilityType: Int, roomId: Int): String? = transaction {
+    return@transaction FacilityReservationEntity.wrapRows(FacilitiesReservations.select {
+        FacilitiesReservations.start_timestamp.eq(startDate)
+                .and(FacilitiesReservations.room_id.eq(roomId))
+                .and(FacilitiesReservations.is_canceled.eq(false))
+                .and(FacilitiesReservations.end_timestamp.eq(endDate))
+                .and(FacilitiesReservations.facility_type.eq(facilityType))
+    }).toList().firstOrNull()?.id?.value?.toString()
+
 }
 
 fun createReservation(_startDate: Long, _endDate: Long, _roomId: Int, _facilityType: FacilitiesTypes, _facilityId: Int) =
@@ -159,14 +166,26 @@ suspend fun PipelineContext<Unit, ApplicationCall>.handleFacilityDelete() {
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.handleFacilityReservationCancel() {
-    val id = call.parameters["id"]
-
-    if (id.isNullOrEmpty()) {
-        error(ResponseErrorCode.CancelFacilityReservationIdNull(call.request.uri))
-        return
+    val postBody = call.receive<PostAddFacilityReservation>()
+    val startDate = postBody.start_date ?: run {
+        error(ResponseErrorCode.FacilityReservationMissedBody(call.request.uri))
+        return@handleFacilityReservationCancel
     }
+    val endDate = postBody.end_date ?: run {
+        error(ResponseErrorCode.FacilityReservationMissedBody(call.request.uri))
+        return@handleFacilityReservationCancel
+    }
+    val facilityType = FacilitiesTypes.values().find { it.ordinal == postBody.facility_type } ?: run {
+        error(ResponseErrorCode.FacilityReservationMissedBody(call.request.uri))
+        return@handleFacilityReservationCancel
+    }
+    val roomId = postBody.room_id ?: run {
+        error(ResponseErrorCode.FacilityReservationMissedBody(call.request.uri))
+        return@handleFacilityReservationCancel
+    }
+    val id = findFacilityReservation(startDate, endDate, facilityType.ordinal, roomId)
 
-    if (!isFacilityReservationExist(id.toInt())) {
+    if (id == null) {
         error(ResponseErrorCode.CancelFacilityNoExist(call.request.uri))
         return
     }
