@@ -4,20 +4,31 @@ version '1.0.0'
 buildscript {
     ext.kotlin_version = '1.3.0-rc-190'
     ext.ktor_version = '1.0.0-beta-2'
+    ext.logback_version = '1.2.3'
 
     repositories {
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
     }
 }
 
 
-apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'application'
 sourceCompatibility = 1.8
+
+mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+
+sourceSets {
+    main.kotlin.srcDirs = [ 'src' ]
+    main.resources.srcDirs = [ 'resources' ]
+}
 
 repositories {
     mavenCentral()
@@ -25,6 +36,7 @@ repositories {
     maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     maven { url "https://dl.bintray.com/kotlin/exposed" }
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 dependencies {
@@ -33,9 +45,19 @@ dependencies {
     compile 'org.jetbrains.exposed:exposed:0.11.1'
     compile "mysql:mysql-connector-java:5.1.46"
     compile "io.ktor:ktor-gson:$ktor_version"
+    compile "io.ktor:ktor-html-builder:$ktor_version"
+    compile "ch.qos.logback:logback-classic:$logback_version"
     compile group: 'com.h2database', name: 'h2', version: '1.4.197'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+shadowJar {
+    baseName = 'room_service'
+    classifier = null
+    version = null
+}
+
+kotlin.experimental.coroutines = 'enable'
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
