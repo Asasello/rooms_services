@@ -25,10 +25,6 @@ sourceCompatibility = 1.8
 
 mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
-sourceSets {
-    main.kotlin.srcDirs = [ 'src' ]
-    main.resources.srcDirs = [ 'resources' ]
-}
 
 repositories {
     mavenCentral()
