@@ -2,7 +2,7 @@ package configuration
 
 import org.jetbrains.exposed.sql.Database
 
-private const val DATABASE_URL = "jdbc:mysql://localhost:3306/room_services_db"
+private const val DATABASE_URL = "jdbc:mysql://mysql-room-service:3306/room_services_db"
 private const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
 private const val DATABASE_USER = "root"
 private const val DATABASE_USER_PASSWORD = "Database223344"
