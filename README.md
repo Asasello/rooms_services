@@ -40,30 +40,30 @@ Kotlin, Ktor, Exposed, MySQL
 # Docker
 
 ## Uruchamianie zdokerowanego projektu
-docker pull roomservice/room_service:default_data
-docker pull roomservice/room_service:no_data
-docker pull roomservice/mysql_room_service
-docker run --name mysql-room-service -p 3306:3306 -d roomservice/mysql_room_service
-docker run -it -p 8095:8095 --name room_service --link mysql-room-service:msql -d roomservice/room_service:default_data
-docker logs room_service (sprawdzić czy wypełnił danymi bazę; dodatkowo dla testu można http://localhost:8095/get-all-rooms)
-docker rm -f room_service
-docker run -it -p 8095:8095 --name room_service --link mysql-room-service:msql -d roomservice/room_service:no_data
-(sprawdzić http://localhost:8095/get-all-rooms)
+* $ docker pull roomservice/room_service:default_data
+* $ docker pull roomservice/room_service:no_data
+* $ docker pull roomservice/mysql_room_service
+* $ docker run --name mysql-room-service -p 3306:3306 -d roomservice/mysql_room_service
+* $ docker run -it -p 8095:8095 --name room_service --link mysql-room-service:msql -d roomservice/room_service:default_data
+* $ docker logs room_service (sprawdzić czy wypełnił danymi bazę; dodatkowo dla testu można http://localhost:8095/get-all-rooms)
+* $ docker rm -f room_service
+* $ docker run -it -p 8095:8095 --name room_service --link mysql-room-service:msql -d roomservice/room_service:no_data
+* (sprawdzić http://localhost:8095/get-all-rooms)
 
 ## Tworzenie obrazu serwisu
-cd room_service
-./gradlew build
-docker build -t room_service .
-docker images (powinien być room_service z tagiem latest)
+* $ cd room_service
+* $ ./gradlew build
+* $ docker build -t room_service .
+* $ docker images (powinien być room_service z tagiem latest)
 
 ## Tworzenie obrazu bazy danych mySQL
-cd room_service/db
-docker build -t mysql-room-service .
-docker images (powinien być mysql-room-service z tagiem latest)
+* $ cd room_service/db
+* $ docker build -t mysql-room-service .
+* $ docker images (powinien być mysql-room-service z tagiem latest)
 
 ## Inne przydatne
-docker images -a (pokazuje wszystkie obrazy)
-docker container ls -a (pokazuje wszystkie kontenery)
-docker rm -f id/name (usuwa kontener o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
-docker rmi -f id/name (usuwa obraz o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
-docker logs name/id (pokazuje logi z kontenera)
+* $ docker images -a (pokazuje wszystkie obrazy)
+* $ docker container ls -a (pokazuje wszystkie kontenery)
+* $ docker rm -f id/name (usuwa kontener o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
+* $ docker rmi -f id/name (usuwa obraz o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
+* $ docker logs name/id (pokazuje logi z kontenera)
