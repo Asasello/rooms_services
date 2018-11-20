@@ -23,7 +23,7 @@ apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'application'
 sourceCompatibility = 1.8
 
-mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+mainClassName = "RunnerKt"
 
 
 repositories {

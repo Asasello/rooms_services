@@ -1,0 +1,4 @@
+FROM mysql:latest
+ENV MYSQL_ROOT_PASSWORD Database223344
+ENV MYSQL_DATABASE room_services_db
+EXPOSE 3306
