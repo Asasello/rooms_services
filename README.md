@@ -67,3 +67,68 @@ Kotlin, Ktor, Exposed, MySQL
 * $ docker rm -f id/name (usuwa kontener o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
 * $ docker rmi -f id/name (usuwa obraz o podanym id/name; -f-force - usunie nawet jeśli jest włączony)
 * $ docker logs name/id (pokazuje logi z kontenera)
+
+
+
+
+* $ docker pull marcinus/cleaning-service
+* $ TEMPORARY: docker pull marcinus/booking
+* $ docker pull 221666/hotel_mikrousluga_rezerwacje_web
+* $ docker pull roomservice/room_service:default_data
+* $ docker pull roomservice/room_service:no_data
+* $ docker pull roomservice/mysql_room_service
+
+Odpalenie seriwsu Cleaning:
+* $ docker run --name cleaning_service -p 8081:8081 4b2d8f95b05e (id image "cleaning service")
+
+Opdalenie serwisu Booking:
+* $ docker run --name booking_service -p 8000:8000 c16 (id image "hotel mikrorezerwacje web")
+
+Odpalenie serwisu Rooms:
+pisz tu:
+
+* $ docker start mysql-room-services
+* $ docker run -it -p 8096:8095 --name room_service --link mysql-room-service:msql -d roomservice/room_service:no_data
+
+
+URUCHOMIENIE NGNIX
+* $ sudo nginx
+* $ nginx -s stop
+
+======================================
+
+```
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+
+    keepalive_timeout  65;
+
+    upstream myapp1 {
+        server 127.0.0.1:8096;
+        server 127.0.0.1:8097;
+    }
+
+    server {
+        listen       8095;
+        server_name  localhost;
+
+        location / {
+            proxy_pass http://myapp1;
+        }
+
+
+    }
+
+    include servers/*;
+}
+```
