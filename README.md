@@ -132,3 +132,9 @@ http {
     include servers/*;
 }
 ```
+
+* $ logstash -f /Users/bartekstolinski/Desktop/logstash.conf
+* $ docker run --log-driver=syslog --log-opt syslog-address=tcp://10.5.99.231:123 -it -p 8081:8081 --name cleaning_service -d marcinus/cleaning-service
+* $ docker run --log-driver=syslog --log-opt syslog-address=tcp://10.5.99.231:123 -it -p 8000:8000 --name booking_service -d 221666/hotel_mikrousluga_rezerwacje_web
+* $ docker run --log-driver=syslog --log-opt syslog-address=tcp://10.5.99.231:123 -it -p 8096:8095 --name room_service_1 --link mysql-room-service:msql -d roomservice/room_service:no_data
+* $ docker run --log-driver=syslog --log-opt syslog-address=tcp://10.5.99.231:123 -it -p 8097:8095 --name room_service_2 --link mysql-room-service:msql -d roomservice/room_service:no_data
